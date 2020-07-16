@@ -28,7 +28,7 @@ export default function Register({ register, onIconClick }) {
       <div>
         <strong>
           <span style={{ fontSize: '1.1rem' }}>
-            R$ {formatNumber(String(value.toFixed(2)).replace('.', ','))}
+            R$ {formatNumber(String(value.toFixed(2)).replace('.', ','), type)}
           </span>
         </strong>
       </div>

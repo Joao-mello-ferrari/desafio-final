@@ -28,7 +28,7 @@ export default function Header({
     } else if (filter === null) {
       return filteredRegisters.length;
     } else {
-      return calculateBalance('+') - calculateBalance('-');
+      return ((calculateBalance('+') - calculateBalance('-')) ** 2) ** 0.5;
     }
   };
 
@@ -96,7 +96,8 @@ export default function Header({
           </label>
           <span id="receita" style={{ color: 'green' }}>
             {formatNumber(
-              String(calculateBalance('+').toFixed(2).replace('.', ','))
+              String(calculateBalance('+').toFixed(2).replace('.', ',')),
+              '+'
             )}
           </span>
         </div>
@@ -106,7 +107,8 @@ export default function Header({
           </label>
           <span id="despesas" style={{ color: 'red' }}>
             {formatNumber(
-              String(calculateBalance('-').toFixed(2).replace('.', ','))
+              String(calculateBalance('-').toFixed(2).replace('.', ',')),
+              '-'
             )}
           </span>
         </div>
@@ -117,11 +119,16 @@ export default function Header({
           <span
             id="saldo"
             style={{
-              color: `${calculateBalance('') >= 0 ? 'green' : 'red'}`,
+              color: `${
+                calculateBalance('+') - calculateBalance('-') >= 0
+                  ? 'green'
+                  : 'red'
+              }`,
             }}
           >
             {formatNumber(
-              String(calculateBalance('').toFixed(2).replace('.', ','))
+              String(calculateBalance('').toFixed(2).replace('.', ',')),
+              calculateBalance('+') - calculateBalance('-') < 0 ? '-' : '+'
             )}
           </span>
         </div>

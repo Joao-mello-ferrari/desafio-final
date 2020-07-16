@@ -43,7 +43,7 @@ export default function App() {
   const addRegister = () => {
     setModalType('Adicionar Registro');
     setIsModalOpen(true);
-    setRegisterToEdit('');
+    setRegisterToEdit([]);
   };
 
   const handleModalClose = (state) => {

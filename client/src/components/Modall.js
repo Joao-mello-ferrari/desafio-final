@@ -35,6 +35,8 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
   };
 
   const handleRadioClick = (event) => {
+    console.log(radioState);
+    console.log(event.target.id);
     event.target.id === 'receita' ? setRadioState(true) : setRadioState(false);
   };
 
@@ -74,13 +76,14 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
       day: parseInt(date.slice(8, 10)),
       yearMonth: date.slice(0, 7),
       yearMonthDay: date,
-      type: !register ? (radioState ? '+' : '-') : type,
+      type: register.length === 0 ? (radioState ? '+' : '-') : type,
     };
 
     setSubmmited(true);
     setSubmmitText('Realizando Operação');
     let response = null;
-    if (!register) {
+    if (register.length === 0) {
+      console.log(11111);
       response = await httpService.post(newRegister);
     } else {
       response = await httpService.put(_id, newRegister);
@@ -92,6 +95,30 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
 
   const handleCloseButtonClick = () => {
     onClose(null);
+  };
+
+  const changeRadioState = (radioType) => {
+    if (register.length === 0) {
+      if (radioType === 'receita') {
+        return radioState;
+      } else {
+        return !radioState;
+      }
+    } else {
+      if (type === '+') {
+        if (radioType === 'receita') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (radioType === 'despesa') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
   };
 
   return (
@@ -123,7 +150,7 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
             <button
               style={styles.closeButton}
               className="waves-effect waves-light btn red"
-              onClick={handleCloseButtonClick}
+              onChange={handleCloseButtonClick}
             >
               FECHAR
             </button>
@@ -137,11 +164,9 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
                         name="group1"
                         type="radio"
                         id="receita"
-                        checked={
-                          !register ? radioState : type === '+' ? true : false
-                        }
+                        checked={changeRadioState('receita')}
                         disabled={Type === 'Adicionar Registro' ? false : true}
-                        onChange={handleRadioClick}
+                        onClick={handleRadioClick}
                       />
                       <span style={{ fontSize: '1.2rem' }}>
                         <strong>Receita</strong>
@@ -155,9 +180,7 @@ export default function Modall({ onClose, Type, register, idToDelete }) {
                         name="group1"
                         type="radio"
                         id="despesa"
-                        checked={
-                          !register ? radioState : type === '-' ? true : false
-                        }
+                        checked={changeRadioState('despesa')}
                         disabled={Type === 'Adicionar Registro' ? false : true}
                         onChange={handleRadioClick}
                       />

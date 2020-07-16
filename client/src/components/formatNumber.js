@@ -1,8 +1,17 @@
-export default function formatNumber(number) {
+export default function formatNumber(number, type) {
+  console.log(number);
+  console.log(type);
   let string = number.split('').reverse().join('');
   let floatPart = string.substr(0, 3).split('').reverse().join('');
+  let negative = null;
 
   string = string.substr(3);
+  if (type === '-') {
+    negative = true;
+  } else {
+    negative = false;
+  }
+
   let newString = string;
   let contador = 0;
 
@@ -17,7 +26,11 @@ export default function formatNumber(number) {
     }
   }
   newString = newString.split('').reverse().join('');
-  newString = [newString, floatPart].join('');
+  if (negative) {
+    newString = ['-', newString, floatPart].join('');
+  } else {
+    newString = [newString, floatPart].join('');
+  }
 
   return newString;
 }
