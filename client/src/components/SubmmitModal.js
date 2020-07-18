@@ -33,9 +33,8 @@ const styles = {
     flexDirection: 'column',
 
     alignItems: 'center',
-    // justifyContent: 'center',
 
     margin: 'auto',
     padding: '100px',
-  }
+  },
 };

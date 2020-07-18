@@ -44,10 +44,12 @@ export default function Filter({
         disabled={period === 'Selecione um período' ? true : false}
       >
         <option disabled value="inicial">
-          Selecione um tipo de filtro
+          Selecione um tipo ordenação
         </option>
         <option value="value">Valor</option>
         <option value="day">Dia</option>
+        <option value="category">Categoria</option>
+        <option value="description">Descrição</option>
       </select>
     </div>
   );

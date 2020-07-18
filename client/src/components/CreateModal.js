@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import getDate from '../helpers/getCurrentDate';
 
 Modal.setAppElement('#root');
 
@@ -8,7 +9,7 @@ export default function CreateModal({ onSubmmit, onClose }) {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [value, setValue] = useState('');
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(getDate());
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -143,7 +144,11 @@ export default function CreateModal({ onSubmmit, onClose }) {
                 </div>
                 <div style={{ marginBottom: '10px' }}>
                   <span>Data</span>
-                  <input type="date" onChange={handleDateChange}></input>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={handleDateChange}
+                  ></input>
                 </div>
               </div>
             </div>

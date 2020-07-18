@@ -29,10 +29,33 @@ export default function filterRegisters(
 
   filteredRegisters = positiveRegisters.concat(negativeRegisters);
 
-  if (type === 'day') {
-    filteredRegisters = filteredRegisters.sort((a, b) => {
-      return parseInt(a.day) - parseInt(b.day);
-    });
+  switch (type) {
+    case 'day':
+      filteredRegisters = filteredRegisters.sort((a, b) => {
+        return parseInt(a.day) - parseInt(b.day);
+      });
+      break;
+
+    case 'category':
+      filteredRegisters = filteredRegisters.sort((a, b) => {
+        return a.category.toLowerCase().localeCompare(b.category.toLowerCase());
+      });
+      break;
+
+    case 'description':
+      filteredRegisters = filteredRegisters.sort((a, b) => {
+        return a.description
+          .toLowerCase()
+          .localeCompare(b.description.toLowerCase());
+      });
+      break;
+
+    case 'value':
+      break;
+
+    default:
+      console.log('Não foi encontrado filtro para o option fornecido');
+      break;
   }
 
   return filteredRegisters;

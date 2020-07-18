@@ -1,6 +1,6 @@
 export default function formatDate(date) {
   const year = date.slice(0, 4);
-  const month = parseInt(date.slice(6, 8));
+  const month = parseInt(date.slice(5, 7));
   const months = [
     'jan',
     'fev',
@@ -16,7 +16,7 @@ export default function formatDate(date) {
     'dez',
   ];
 
-  const newMonth = months[month];
+  const newMonth = months[month - 1];
 
   const newDate = [newMonth, '/', year].join('');
 

@@ -12,15 +12,17 @@ export default function App() {
   const [period, setPeriod] = useState('Selecione um período');
   const [allRegisters, setAllRegisters] = useState([]);
   const [filter, setFilter] = useState('');
+  const [sortType, setSortType] = useState('value');
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isSubmmitModalOpen, setIsSubmmitModalOpen] = useState(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [areThereNewRegisters, setAreThereNewRegisters] = useState(null);
-  const [registerToEdit, setRegisterToEdit] = useState({});
-  const [idToUpdate, setIdToUpdate] = useState(null);
   const [submmitModalMessage, setSubmmitModalMessage] = useState('');
 
-  const [sortType, setSortType] = useState('value');
+  const [areThereNewRegisters, setAreThereNewRegisters] = useState(null);
+
+  const [registerToEdit, setRegisterToEdit] = useState({});
+  const [idToUpdate, setIdToUpdate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +33,7 @@ export default function App() {
 
       let response = await httpService.getAll();
       response = response.data;
-      
+
       setAllRegisters(response);
       setIsSubmmitModalOpen(false);
     };
@@ -70,7 +72,6 @@ export default function App() {
     }
     handleSubmmit(id, 'delete');
   };
-
 
   const handleSubmmit = async (item, type) => {
     setIsSubmmitModalOpen(true);
@@ -126,10 +127,7 @@ export default function App() {
         selectType={sortType}
       />
       {isCreateModalOpen && (
-        <CreateModal
-          onClose={handleModalClose}
-          onSubmmit={handleSubmmit}
-        />
+        <CreateModal onClose={handleModalClose} onSubmmit={handleSubmmit} />
       )}
       {isEditModalOpen && (
         <EditModal
@@ -138,11 +136,7 @@ export default function App() {
           register={registerToEdit}
         />
       )}
-      {isSubmmitModalOpen && (
-        <SubmmitModal
-          message={submmitModalMessage}
-        />
-      )}
+      {isSubmmitModalOpen && <SubmmitModal message={submmitModalMessage} />}
     </div>
   );
 }
