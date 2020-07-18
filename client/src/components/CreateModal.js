@@ -156,7 +156,6 @@ export default function CreateModal({ onSubmmit, onClose }) {
             </button>
           </form>
         </div>
-        )}
       </Modal>
     </div>
   );
