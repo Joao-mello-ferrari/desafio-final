@@ -1,9 +1,9 @@
 import React from 'react';
 import Icons from './Icons';
-import formatNumber from './formatNumber';
+import formatNumber from '../helpers/formatNumber';
 
 export default function Register({ register, onIconClick }) {
-  const { _id, description, value, category, type } = register;
+  const { _id, description, value, category, type, day } = register;
 
   const handleClick = (id, type) => {
     onIconClick(id, type);
@@ -16,19 +16,24 @@ export default function Register({ register, onIconClick }) {
         ...{ backgroundColor: `${type === '+' ? '#82E0AA' : '#F1948A'}` },
       }}
     >
-      <div style={styles.text}>
+      <div style={{ width: '100px' }}>
         <strong>
-          <span style={{ fontSize: '1.1rem' }}>{category}</span>
-        </strong>
-        <strong>
-          <span style={{ fontSize: '1.1rem' }}>{description}</span>
+          <span style={{ fontSize: '1.3rem' }}>
+            {String(day).padStart(2, '0')}
+          </span>
         </strong>
       </div>
+      <div style={styles.text}>
+        <strong>
+          <span style={{ fontSize: '1.3rem' }}>{category}</span>
+        </strong>
+        <span style={{ fontSize: '0.9rem' }}>{description}</span>
+      </div>
 
-      <div>
+      <div style={{ width: '30%', display: 'flex', alignItems: 'flex-start' }}>
         <strong>
           <span style={{ fontSize: '1.1rem' }}>
-            R$ {formatNumber(String(value.toFixed(2)).replace('.', ','), type)}
+            R$ {formatNumber(value, type)}
           </span>
         </strong>
       </div>
@@ -45,8 +50,8 @@ const styles = {
   text: {
     display: 'flex',
     flexDirection: 'column',
-
-    width: '50%',
+    width: '30%',
+    marginRight: '80px',
   },
 
   main: {
@@ -54,7 +59,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
 
-    width: '70%',
+    width: '60%',
 
     border: '1px solid lightGray',
     borderRadius: '5px',

@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import formatNumber from './formatNumber';
+import React from 'react';
+import formatNumber from '../helpers/formatNumber';
+import createPeriods from '../helpers/createPeriods';
+import calculateBalance from '../helpers/calculateBalance';
+import formatDate from '../helpers/formatDate';
 
 export default function Header({
   onSelectChange,
@@ -10,48 +13,6 @@ export default function Header({
     onSelectChange(event.target.value);
   };
 
-  const calculateBalance = (filter) => {
-    const filteredRegisters = allRegisters.filter((register) => {
-      return register.yearMonth === selectedPeriod;
-    });
-
-    if (filter) {
-      const balance = filteredRegisters
-        .filter((register) => {
-          return register.type === filter;
-        })
-        .reduce((total, current) => {
-          return total + current.value;
-        }, 0);
-
-      return balance;
-    } else if (filter === null) {
-      return filteredRegisters.length;
-    } else {
-      return ((calculateBalance('+') - calculateBalance('-')) ** 2) ** 0.5;
-    }
-  };
-
-  const createOptions = () => {
-    const periodsSet = new Set();
-
-    allRegisters.forEach((register) => {
-      return periodsSet.add(register.yearMonth);
-    });
-
-    let periodsArray = Array.from(periodsSet);
-
-    periodsArray = periodsArray
-      .sort((a, b) => {
-        return a.slice(5, 7) - b.slice(5, 7);
-      })
-      .sort((a, b) => {
-        return a.slice(0, 4) - b.slice(0, 4);
-      });
-
-    return periodsArray;
-  };
-
   return (
     <div className="center">
       <div className="input-field col s12" style={{ marginTop: '50px' }}>
@@ -59,22 +20,21 @@ export default function Header({
           value={selectedPeriod}
           style={{ display: 'inline', maxWidth: '200px' }}
           onChange={handleSelectChange}
-          placeholder="ola"
         >
           <option disabled value="Selecione um período">
             Selecione um período
           </option>
-          {createOptions().map((item) => {
+          {createPeriods(allRegisters).map((item) => {
             return (
               <option
                 style={{
                   fontSize: '1.2rem',
-                  padding: '1px',
+                  fontWeight: '500',
                 }}
                 key={item}
                 value={item}
               >
-                {item.replace('-', '/')}
+                {formatDate(item)}
               </option>
             );
           })}
@@ -87,7 +47,9 @@ export default function Header({
             Lançamentos (nº):
           </label>
           <span id="lançamentos" style={{ color: 'black' }}>
-            <strong>{calculateBalance(null)}</strong>
+            <strong>
+              {calculateBalance('length', allRegisters, selectedPeriod)}
+            </strong>
           </span>
         </div>
         <div>
@@ -96,7 +58,7 @@ export default function Header({
           </label>
           <span id="receita" style={{ color: 'green' }}>
             {formatNumber(
-              String(calculateBalance('+').toFixed(2).replace('.', ',')),
+              calculateBalance('+', allRegisters, selectedPeriod),
               '+'
             )}
           </span>
@@ -107,7 +69,7 @@ export default function Header({
           </label>
           <span id="despesas" style={{ color: 'red' }}>
             {formatNumber(
-              String(calculateBalance('-').toFixed(2).replace('.', ',')),
+              calculateBalance('-', allRegisters, selectedPeriod),
               '-'
             )}
           </span>
@@ -120,15 +82,17 @@ export default function Header({
             id="saldo"
             style={{
               color: `${
-                calculateBalance('+') - calculateBalance('-') >= 0
+                calculateBalance('sum', allRegisters, selectedPeriod) >= 0
                   ? 'green'
                   : 'red'
               }`,
             }}
           >
             {formatNumber(
-              String(calculateBalance('').toFixed(2).replace('.', ',')),
-              calculateBalance('+') - calculateBalance('-') < 0 ? '-' : '+'
+              Math.abs(calculateBalance('sum', allRegisters, selectedPeriod)),
+              calculateBalance('sum', allRegisters, selectedPeriod) >= 0
+                ? '+'
+                : '-'
             )}
           </span>
         </div>

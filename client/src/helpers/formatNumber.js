@@ -1,7 +1,6 @@
 export default function formatNumber(number, type) {
-  console.log(number);
-  console.log(type);
-  let string = number.split('').reverse().join('');
+  let newNumber = String(number.toFixed(2).replace('.', ','));
+  let string = newNumber.split('').reverse().join('');
   let floatPart = string.substr(0, 3).split('').reverse().join('');
   let negative = null;
 
@@ -26,6 +25,7 @@ export default function formatNumber(number, type) {
     }
   }
   newString = newString.split('').reverse().join('');
+
   if (negative) {
     newString = ['-', newString, floatPart].join('');
   } else {

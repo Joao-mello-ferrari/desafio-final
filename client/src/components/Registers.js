@@ -1,40 +1,14 @@
 import React from 'react';
 import Register from './Register.js';
+import filterRegisters from '../helpers/filterRegisters';
 
 export default function Resgisters({
   filter,
   allRegisters,
   selectedPeriod,
   onIconClick,
+  selectType,
 }) {
-  const filterRegisters = () => {
-    let filteredRegisters = allRegisters.filter((register) => {
-      return (
-        register.yearMonth === selectedPeriod &&
-        register.description.toLowerCase().includes(filter.toLowerCase())
-      );
-    });
-
-    const positiveRegisters = filteredRegisters
-      .filter((register) => {
-        return register.type === '+';
-      })
-      .sort((a, b) => {
-        return b.value - a.value;
-      });
-
-    const negativeRegisters = filteredRegisters
-      .filter((register) => {
-        return register.type === '-';
-      })
-      .sort((a, b) => {
-        return b.value - a.value;
-      });
-
-    filteredRegisters = positiveRegisters.concat(negativeRegisters);
-    return filteredRegisters;
-  };
-
   const handleIconClick = (id, type) => {
     onIconClick(id, type);
   };
@@ -42,13 +16,15 @@ export default function Resgisters({
   return (
     <div>
       <ul>
-        {filterRegisters().map((register) => {
-          return (
-            <li key={register._id}>
-              <Register register={register} onIconClick={handleIconClick} />
-            </li>
-          );
-        })}
+        {filterRegisters(filter, allRegisters, selectedPeriod, selectType).map(
+          (register) => {
+            return (
+              <li key={register._id}>
+                <Register register={register} onIconClick={handleIconClick} />
+              </li>
+            );
+          }
+        )}
       </ul>
     </div>
   );

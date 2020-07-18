@@ -1,31 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export default function Filter({ onFilterChange, value, onButtonClick }) {
+export default function Filter({
+  onFilterChange,
+  value,
+  onButtonClick,
+  onSelectChange,
+  period,
+}) {
+  const [selectedOption, setSelectedOption] = useState('inicial');
+
   const handleInputChange = (event) => {
-    console.log(event.target.value);
     onFilterChange(event.target.value);
   };
 
-  const handleButtonClick = () => {
-    onButtonClick(null);
+  const handleButtonClick = (event) => {
+    onButtonClick(event.target.id);
+  };
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+    onSelectChange(event.target.value);
   };
 
   return (
     <div style={styles.filter}>
-      <button
-        // className="waves-effect waves-light btn"
-        style={styles.button}
-        onClick={handleButtonClick}
-      >
+      <button id="create" style={styles.button} onClick={handleButtonClick}>
         + NOVO LANÇAMENTO
       </button>
+
       <input
         style={styles.text}
         type="text"
         value={value}
         onChange={handleInputChange}
         placeholder="Filtre seus registros pela descrição..."
+        disabled={period === 'Selecione um período' ? true : false}
       />
+
+      <select
+        value={selectedOption}
+        style={{ display: 'inline', maxWidth: '300px', marginLeft: '100px' }}
+        onChange={handleSelectChange}
+        disabled={period === 'Selecione um período' ? true : false}
+      >
+        <option disabled value="inicial">
+          Selecione um tipo de filtro
+        </option>
+        <option value="value">Valor</option>
+        <option value="day">Dia</option>
+      </select>
     </div>
   );
 }
